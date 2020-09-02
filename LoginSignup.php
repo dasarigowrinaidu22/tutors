@@ -27,12 +27,12 @@ if (isset($_POST['signin'])) {
 	$message="";
 	$rowcount=mysqli_num_rows($result);
 	if ($rowcount>0) {
-		$message="SignIn";
 		$row=mysqli_fetch_assoc($result);
 		$_SESSION['full_name']=$row['full_name'];
 		$_SESSION['id']=$row['id'];
 		$_SESSION['category']=$row['category'];
 		$_SESSION['status']=$row['status'];
+		echo $row['category'];
 	}
 	else{
 		$message="Invalid Credentials";

@@ -40,7 +40,12 @@
 								type:'POST',
 								data:'emailPhone='+emailPhone+'&password='+password+'&signin=signin',
 								success:function(data){
-									window.location.replace("create_new_course.html");
+									if(data == "T")
+										window.location.replace("instructor_dashboard.html");
+									else if(data == "L")
+										window.location.replace("index.html");
+									else
+										$("#responce").html(data).fadeOut(5000);
 								},
 								error:function(data){
 									$("#responce").html(data);
