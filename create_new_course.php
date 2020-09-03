@@ -1,4 +1,5 @@
 ﻿<!DOCTYPE html>
+<?php include 'dbconfig.php'; ?>
 <html lang="en">
 <head>
 		<meta charset="utf-8">
@@ -26,6 +27,60 @@
 		<link href="vendor/OwlCarousel/assets/owl.theme.default.min.css" rel="stylesheet">
 		<link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 		<link rel="stylesheet" type="text/css" href="vendor/semantic/semantic.min.css">		
+
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+		<script>
+		$(document).ready(function(){
+		  $("#category").change(function(){
+		    $.ajax({
+		    	url:'ajax/courses.php?',
+		    	type:'POST',
+		    	data:'id='+$("#category").val()+'&sub_cat=Y',
+		    	success:function(data){
+		    		$("#sub_category").html(data);
+		    	},
+		    	error:function(data){
+		    		alert(data);
+		    	}
+		    });
+		  });
+		  $("#sub_category").change(function(){
+		    $.ajax({
+		    	url:'ajax/courses.php?',
+		    	type:'POST',
+		    	data:'id='+$("#sub_category").val()+'&course=Y',
+		    	success:function(data){
+		    		$("#course").html(data);
+		    	},
+		    	error:function(data){
+		    		alert(data);
+		    	}
+		    });
+		  });
+		});
+		function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#coverImg').attr('src', e.target.result);
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        	}
+    		}
+
+    	function readVideoURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#coverVideo').attr('src', e.target.result);
+            };
+            reader.readAsDataURL(input.files[0]);
+        	}
+    		}
+		</script>
 		
 	</head>
 
@@ -54,7 +109,7 @@
 		<div class="header_right">
 			<ul>
 				<li>
-					<a href="create_new_course.html" class="upload_btn">Create New Course</a>
+					<a href="create_new_course.php" class="upload_btn">Create New Course</a>
 				</li>
 				<li>
 					<a href="index.html" class="option_links"><i class='uil uil-home-alt'></i><span class="noti_count">9+</span></a>
@@ -194,7 +249,7 @@
 						</a>
 					</li>
 					<li class="menu--item">
-						<a href="create_new_course.html" class="menu--link active" title="Create Course">
+						<a href="create_new_course.php" class="menu--link active" title="Create Course">
 							<i class='uil uil-plus-circle menu--icon'></i>
 							<span class="menu--label">Create Course</span>
 						</a>
@@ -321,7 +376,7 @@
 															<div class="ui search focus mt-30 lbel25">
 																<label>Course Title*</label>
 																<div class="ui left icon input swdh19">
-																	<input class="prompt srch_explore" type="text" placeholder="Insert your course title." name="title" data-purpose="edit-course-title" maxlength="60" id="main[title]" value="" required>															
+																	<input class="prompt srch_explore" type="text" placeholder="Insert your course title." name="main_title" data-purpose="edit-course-title" maxlength="60" id="main_title" value="" required>															
 																	<div class="badge_num">60</div>
 																</div>
 															</div>									
@@ -330,7 +385,7 @@
 															<div class="ui search focus mt-30 lbel25">
 																<label>Course Subtitle*</label>
 																<div class="ui left icon input swdh19">
-																	<input class="prompt srch_explore" type="text" placeholder="Insert your course Subtitle." name="subtitle" data-purpose="edit-course-title" maxlength="60" id="sub[title]" value="">															
+																	<input class="prompt srch_explore" type="text" placeholder="Insert your course Subtitle." name="sub_title" data-purpose="edit-course-title" maxlength="60" id="sub_title" value="">															
 																	<div class="badge_num2">120</div>
 																</div>
 															</div>									
@@ -353,7 +408,7 @@
 																	<div class="textarea_dt">															
 																		<div class="ui form swdh339">
 																			<div class="field">
-																				<textarea rows="5" name="description" id="id_course_description" placeholder="Insert your course description"></textarea>
+																				<textarea rows="5" name="description" id="description" placeholder="Insert your course description"></textarea>
 																			</div>
 																		</div>										
 																	</div>
@@ -364,7 +419,7 @@
 															<div class="mt-30 lbel25">
 																<label>Language*</label>
 															</div>
-															<select class="ui hj145 dropdown cntry152 prompt srch_explore">
+															<select class="ui hj145 dropdown cntry152 prompt srch_explore" name="language" id="language">
 																<option value="">Select Language</option>
 																<option value="1">English</option>
 																<option value="2">Español</option>
@@ -387,45 +442,36 @@
 															<div class="mt-30 lbel25">
 																<label>Course Category*</label>
 															</div>
-															<select class="ui hj145 dropdown cntry152 prompt srch_explore">
+															<select class="ui hj145 dropdown cntry152 prompt srch_explore" name="category" id="category">
 																<option value="">Select Category</option>
-																<option value="1">Development</option>
-																<option value="2">Business</option>
-																<option value="3">Finance & Accounting</option>
-																<option value="4">IT & Software</option>
-																<option value="5">Office Productivity</option>
-																<option value="6">Personal Development</option>
-																<option value="7">Design</option>
-																<option value="8">Marketing</option>
-																<option value="9">Lifestyle</option>
-																<option value="10">Photography</option>
-																<option value="11">Health & Fitness</option>
-																<option value="12">Music</option>
-																<option value="13">Teaching & Academics</option>
+																<?php 
+																	$result=mysqli_query($con, "SELECT * FROM course_category");
+																	while($row=mysqli_fetch_assoc($result))
+																	{
+																		echo "<option value='".$row['id']."'>".$row['category_name']."</option>";
+																	}
+																?>
 															</select>
 														</div>
 														<div class="col-lg-4 col-md-6">
 															<div class="mt-30 lbel25">
 																<label>Course Subcategory*</label>
 															</div>
-															<select class="ui hj145 dropdown cntry152 prompt srch_explore">
+															<select class="ui hj145 dropdown cntry152 prompt srch_explore" name="sub_category" id="sub_category">
 																<option value="">Select Subcategory</option>
-																<option value="1">Javascript</option>
-																<option value="2">Angular</option>
-																<option value="3">React</option>
-																<option value="4">CSS</option>
-																<option value="5">PHP</option>
-																<option value="6">Node.Js</option>
-																<option value="7">WordPress</option>
-																<option value="8">Vue JS</option>
-																<option value="9">Shopify</option>
-																<option value="10">Magento</option>
-																<option value="11">Open Cart </option>
+															</select>
+														</div>
+														<div class="col-lg-4 col-md-6">
+															<div class="mt-30 lbel25">
+																<label>Course*</label>
+															</div>
+															<select class="ui hj145 dropdown cntry152 prompt srch_explore" name="course" id="course">
+																<option value="">Select Course</option>
 															</select>
 														</div>													
 													</div>
 												</div>
-												<div class="price_course">
+												<!-- <div class="price_course">
 													<div class="row">
 														<div class="col-lg-12">
 															<div class="price_title">
@@ -486,7 +532,7 @@
 															</select>
 														</div>
 													</div>
-												</div>
+												</div> -->
 											</div>
 										</div>
 									</div>
@@ -503,7 +549,7 @@
 															<div class="view_all_dt">	
 																<div class="view_img_left">	
 																	<div class="view__img">	
-																		<img src="images/courses/add_img.jpg" alt="">
+																		<img src="images/courses/add_img.jpg" alt="" id="coverImg">
 																	</div>
 																</div>
 																<div class="view_img_right">	
@@ -512,7 +558,7 @@
 																	<div class="upload__input">
 																		<div class="input-group">
 																			<div class="custom-file">
-																				<input type="file" class="custom-file-input" id="inputGroupFile04">
+																				<input type="file" class="custom-file-input" id="inputGroupFile04" onchange="readURL(this);">
 																				<label class="custom-file-label" for="inputGroupFile04">No Choose file</label>
 																			</div>
 																		</div>
@@ -522,7 +568,10 @@
 															<div class="view_all_dt">	
 																<div class="view_img_left">	
 																	<div class="view__img">	
-																		<img src="images/courses/add_video.jpg" alt="">
+																		<!-- <img src="images/courses/add_video.jpg" alt="" id="coverVideo"> -->
+																		<video controls src="images/courses/add_video.jpg" id="coverVideo">
+																		  Your browser does not support the video tag.
+																		</video>
 																	</div>
 																</div>
 																<div class="view_img_right">	
@@ -531,7 +580,7 @@
 																	<div class="upload__input">
 																		<div class="input-group">
 																			<div class="custom-file">
-																				<input type="file" class="custom-file-input" id="inputGroupFile05">
+																				<input type="file" class="custom-file-input" id="inputGroupFile05" onchange="readVideoURL(this);">
 																				<label class="custom-file-label" for="inputGroupFile05">No Choose file</label>
 																			</div>
 																		</div>
