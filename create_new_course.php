@@ -73,7 +73,6 @@
     	function readVideoURL(input) {
         if (input.files && input.files[0]) {
             var reader = new FileReader();
-
             reader.onload = function (e) {
                 $('#coverVideo').attr('src', e.target.result);
             };
@@ -327,7 +326,7 @@
 	<div class="wrapper">
 		<div class="sa4d25">
 			<div class="container">
-				<form>			
+				<form id="newCourseForm" enctype="multipart/form-data">
 				<div class="row">
 					<div class="col-lg-12">	
 						<h2 class="st_title"><i class="uil uil-analysis"></i> Create New Course</h2>
@@ -385,7 +384,7 @@
 															<div class="ui search focus mt-30 lbel25">
 																<label>Course Subtitle*</label>
 																<div class="ui left icon input swdh19">
-																	<input class="prompt srch_explore" type="text" placeholder="Insert your course Subtitle." name="sub_title" data-purpose="edit-course-title" maxlength="60" id="sub_title" value="">															
+																	<input class="prompt srch_explore" type="text" placeholder="Insert your course Subtitle." name="sub_title" data-purpose="edit-course-title" maxlength="60" id="sub_title" value="" required>															
 																	<div class="badge_num2">120</div>
 																</div>
 															</div>									
@@ -408,7 +407,7 @@
 																	<div class="textarea_dt">															
 																		<div class="ui form swdh339">
 																			<div class="field">
-																				<textarea rows="5" name="description" id="description" placeholder="Insert your course description"></textarea>
+																				<textarea rows="5" name="description" id="description" placeholder="Insert your course description" required></textarea>
 																			</div>
 																		</div>										
 																	</div>
@@ -419,7 +418,7 @@
 															<div class="mt-30 lbel25">
 																<label>Language*</label>
 															</div>
-															<select class="ui hj145 dropdown cntry152 prompt srch_explore" name="language" id="language">
+															<select class="ui hj145 dropdown cntry152 prompt srch_explore" name="language" id="language" required>
 																<option value="">Select Language</option>
 																<option value="1">English</option>
 																<option value="2">Español</option>
@@ -442,7 +441,7 @@
 															<div class="mt-30 lbel25">
 																<label>Course Category*</label>
 															</div>
-															<select class="ui hj145 dropdown cntry152 prompt srch_explore" name="category" id="category">
+															<select class="ui hj145 dropdown cntry152 prompt srch_explore" name="category" id="category" required>
 																<option value="">Select Category</option>
 																<?php 
 																	$result=mysqli_query($con, "SELECT * FROM course_category");
@@ -457,7 +456,7 @@
 															<div class="mt-30 lbel25">
 																<label>Course Subcategory*</label>
 															</div>
-															<select class="ui hj145 dropdown cntry152 prompt srch_explore" name="sub_category" id="sub_category">
+															<select class="ui hj145 dropdown cntry152 prompt srch_explore" name="sub_category" id="sub_category" required>
 																<option value="">Select Subcategory</option>
 															</select>
 														</div>
@@ -465,7 +464,7 @@
 															<div class="mt-30 lbel25">
 																<label>Course*</label>
 															</div>
-															<select class="ui hj145 dropdown cntry152 prompt srch_explore" name="course" id="course">
+															<select class="ui hj145 dropdown cntry152 prompt srch_explore" name="course" id="course" required>
 																<option value="">Select Course</option>
 															</select>
 														</div>													
@@ -558,13 +557,14 @@
 																	<div class="upload__input">
 																		<div class="input-group">
 																			<div class="custom-file">
-																				<input type="file" class="custom-file-input" id="inputGroupFile04" onchange="readURL(this);">
+																				<input type="file" class="custom-file-input" id="inputGroupFile04" onchange="readURL(this);" required  name="coverPhoto">
 																				<label class="custom-file-label" for="inputGroupFile04">No Choose file</label>
 																			</div>
 																		</div>
 																	</div>
 																</div>
 															</div>
+															<input type="file" name="testFile">
 															<div class="view_all_dt">	
 																<div class="view_img_left">	
 																	<div class="view__img">	
@@ -580,7 +580,7 @@
 																	<div class="upload__input">
 																		<div class="input-group">
 																			<div class="custom-file">
-																				<input type="file" class="custom-file-input" id="inputGroupFile05" onchange="readVideoURL(this);">
+																				<input type="file" class="custom-file-input" id="inputGroupFile05" onchange="readVideoURL(this);" required name="promotionVideo">
 																				<label class="custom-file-label" for="inputGroupFile05">No Choose file</label>
 																			</div>
 																		</div>
@@ -611,7 +611,7 @@
 																	<div class="ui search focus mt-30 lbel25">
 																		<label>Course Content Title*</label>
 																		<div class="ui left icon input swdh19">
-																			<input class="prompt srch_explore" type="text" placeholder="Insert your course content title." name="title" data-purpose="edit-course-title" maxlength="60" id="Content[title]" value="">															
+																			<input class="prompt srch_explore" type="text" placeholder="Insert your course content title." name="cctitle" data-purpose="edit-course-title" maxlength="60" id="Content[title]" value="">															
 																		</div>
 																	</div>									
 																</div>
@@ -624,11 +624,11 @@
 																	<div class="ui search focus mt-30 lbel25">
 																		<label>Lecture Title*</label>
 																		<div class="ui left icon input swdh19">
-																			<input class="prompt srch_explore" type="text" placeholder="Insert your lecture title." name="title" data-purpose="edit-course-title" maxlength="60" id="lecture[title]" value="">															
+																			<input class="prompt srch_explore" type="text" placeholder="Insert your lecture title." name="ltitle" data-purpose="edit-course-title" maxlength="60" id="lecture[title]" value="">															
 																		</div>
 																	</div>									
 																</div>
-																<div class="col-lg-4 col-md-6">
+																<!-- <div class="col-lg-4 col-md-6">
 																	<div class="part_input mt-30 lbel25">
 																		<label>File*</label>
 																		<div class="input-group">
@@ -638,15 +638,15 @@
 																			</div>
 																		</div>
 																	</div>
-																</div>
-																<div class="col-lg-4 col-md-6">	
+																</div> -->
+																<!-- <div class="col-lg-4 col-md-6">	
 																	<div class="ui search focus mt-30 lbel25">
 																		<label>Sort</label>
 																		<div class="ui left icon input swdh19">
 																			<input class="prompt srch_explore" type="number" name="sort" min="0" max="100" placeholder="0">															
 																		</div>
 																	</div>										
-																</div>
+																</div> -->
 																<div class="col-lg-12 col-md-12">	
 																	<div class="course_des_textarea mt-30 lbel25">
 																		<label>Description*</label>
@@ -665,14 +665,14 @@
 																			<div class="textarea_dt">															
 																				<div class="ui form swdh339">
 																					<div class="field">
-																						<textarea rows="5" name="description" id="id_part_description" placeholder="Insert your course part description"></textarea>
+																						<textarea rows="5" name="ldescription" id="id_part_description" placeholder="Insert your course part description"></textarea>
 																					</div>
 																				</div>										
 																			</div>
 																		</div>
 																	</div>
 																</div>
-																<div class="col-lg-5 col-md-6">															
+																<!-- <div class="col-lg-5 col-md-6">															
 																	<div class="ui search focus mt-30 lbel25">
 																		<label>Volume*</label>
 																		<div class="ui left icon input swdh19 swdh95">
@@ -680,8 +680,8 @@
 																			<div class="badge_mb">MB</div>
 																		</div>
 																	</div>									
-																</div>
-																<div class="col-lg-5 col-md-6">															
+																</div> -->
+																<!-- <div class="col-lg-5 col-md-6">															
 																	<div class="ui search focus mt-30 lbel25">
 																		<label>Duration*</label>
 																		<div class="ui left icon input swdh19 swdh55">
@@ -689,11 +689,11 @@
 																			<div class="badge_min">Minutes</div>
 																		</div>
 																	</div>									
-																</div>
-																<div class="col-lg-2 col-md-12">
+																</div> -->
+																<!-- <div class="col-lg-2 col-md-12">
 																	<button class="part_btn_save prt-sv" type="submit">Save Lecture</button>
-																</div>
-																<div class="col-lg-12 col-md-12">
+																</div> -->
+																<!-- <div class="col-lg-12 col-md-12">
 																	<div class="table-responsive mt-50 mb-0">
 																		<table class="table ucp-table">
 																			<thead class="thead-s">
@@ -735,18 +735,18 @@
 																			</tbody>
 																		</table>
 																	</div>
-																</div>
-																<div class="col-lg-12 col-md-12">
+																</div> -->
+																<!-- <div class="col-lg-12 col-md-12">
 																	<div class="save_content">
 																		<button class="save_content_btn" type="Submit">Save Course Content</button>
 																	</div>
-																</div>
+																</div> -->
 															</div>
 														</div>
 													</div>
 												</div>
 											</div>
-											<div class="table-responsive mt-30">
+											<!-- <div class="table-responsive mt-30">
 												<table class="table ucp-table" id="content-table">
 													<thead class="thead-s">
 														<tr>
@@ -776,7 +776,7 @@
 														</tr>
 													</tbody>
 												</table>
-											</div>
+											</div> -->
 										 </div>
 									</div>
 									
@@ -785,7 +785,7 @@
 											<div class="title-icon">
 												<h3 class="title"><i class="uil uil-file-copy-alt"></i>Extra Information</h3>
 											</div>
-										   <div class="course__form">
+										   <!-- <div class="course__form">
 												<div class="row">
 													<div class="col-lg-12">		
 														<div class="extra_info">		
@@ -877,7 +877,7 @@
 														</div>
 													</div>
 												</div>
-											</div>
+											</div> -->
 										 </div>
 									</div>
 								   
@@ -952,7 +952,24 @@
 	<script>
 		$('#add-course-tab').steps({
 		  onFinish: function () {
-			alert('Wizard Completed');
+		        var formData = $('#newCourseForm').serialize();
+		  //       var form = document.getElementById('form');
+				// var formData = new FormData(form);
+		        // alert(formData);
+		        $.ajax({
+		            url: 'ajax/createNewCourse.php?',
+		            type: 'POST',
+		            cache       : false,
+			        contentType : false,
+			        processData : false,
+		            data: formData,
+		            success:function(data){
+		            	alert("success "+data);
+		            } ,
+		            error:function(data){
+		            	alert("error "+data);
+		            }
+		        });
 		  }
 		});		
 	</script>
