@@ -326,7 +326,7 @@
 	<div class="wrapper">
 		<div class="sa4d25">
 			<div class="container">
-				<form id="newCourseForm" enctype="multipart/form-data">
+				<form id="newCourseForm" action="ajax/createNewCouerse.php" method="POST">
 				<div class="row">
 					<div class="col-lg-12">	
 						<h2 class="st_title"><i class="uil uil-analysis"></i> Create New Course</h2>
@@ -557,7 +557,7 @@
 																	<div class="upload__input">
 																		<div class="input-group">
 																			<div class="custom-file">
-																				<input type="file" class="custom-file-input" id="inputGroupFile04" onchange="readURL(this);" required  name="coverPhoto">
+																				<input type="file" class="custom-file-input" id="inputGroupFile04" onchange="readURL(this);" required  name="coverPhoto" accept="image/*">
 																				<label class="custom-file-label" for="inputGroupFile04">No Choose file</label>
 																			</div>
 																		</div>
@@ -580,7 +580,7 @@
 																	<div class="upload__input">
 																		<div class="input-group">
 																			<div class="custom-file">
-																				<input type="file" class="custom-file-input" id="inputGroupFile05" onchange="readVideoURL(this);" required name="promotionVideo">
+																				<input type="file" class="custom-file-input" id="inputGroupFile05" onchange="readVideoURL(this);" required name="promotionVideo" accept="video/*">
 																				<label class="custom-file-label" for="inputGroupFile05">No Choose file</label>
 																			</div>
 																		</div>
@@ -885,12 +885,14 @@
 								<div class="step-footer step-tab-pager">
 									<button data-direction="prev" class="btn btn-default steps_btn">PREVIOUS</button>
 									<button data-direction="next" class="btn btn-default steps_btn">Next</button>
-									<button data-direction="finish" class="btn btn-default steps_btn" type="submit">Submit</button>
+									<button data-direction="finish" name="submit_btn" class="btn btn-default steps_btn" type="submit" id="shide">Submit</button>
+									<input type="submit" value="Submit" style="display: none;" id="sshow">
 								</div>
 							</div>
                         </div>
                     </div>
 				</div>
+				<input type="submit" value="Submit" style="display: none;" id="sshow">
 			</form>
 			</div>
 		</div>
@@ -952,27 +954,31 @@
 	<script>
 		$('#add-course-tab').steps({
 		  onFinish: function () {
-		        var formData = $('#newCourseForm').serialize();
-		  //       var form = document.getElementById('form');
-				// var formData = new FormData(form);
-		        // alert(formData);
-		        $.ajax({
-		            url: 'ajax/createNewCourse.php?',
-		            type: 'POST',
-		            cache       : false,
-			        contentType : false,
-			        processData : false,
-		            data: formData,
-		            success:function(data){
-		            	alert("success "+data);
-		            } ,
-		            error:function(data){
-		            	alert("error "+data);
-		            }
-		        });
+		   $("#shide").hide();
+		   $("#sshow").show();
 		  }
-		});		
+		});
+
+		$(document).ready(function (e) {
+	$("#newCourseForm").on('submit',(function(e) {
+		e.preventDefault();
+		     $.ajax({
+		        	url: 'ajax/createNewCourse.php',
+					type: "POST",
+					data:  new FormData(this),
+					contentType: false,
+		    	    cache: false,
+					processData:false,
+					success: function(data){
+						alert("success "+data);
+				    },
+				  	error: function(data){
+			    		alert("error "+data);
+			    	} 	        
+		   			});
+	}));
+});
+
 	</script>
-			
 </body>
 </html>
