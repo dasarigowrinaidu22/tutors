@@ -548,7 +548,7 @@
 															<div class="view_all_dt">	
 																<div class="view_img_left">	
 																	<div class="view__img">	
-																		<img src="images/courses/add_img.jpg" alt="" id="coverImg">
+																		<img src="images/courses/add_img.jpg" alt="" id="coverImg" width=480 height=270>
 																	</div>
 																</div>
 																<div class="view_img_right">	
@@ -569,7 +569,7 @@
 																<div class="view_img_left">	
 																	<div class="view__img">	
 																		<!-- <img src="images/courses/add_video.jpg" alt="" id="coverVideo"> -->
-																		<video controls src="images/courses/add_video.jpg" id="coverVideo">
+																		<video controls src="images/courses/add_video.jpg" id="coverVideo" width=410 height=270>
 																		  Your browser does not support the video tag.
 																		</video>
 																	</div>
@@ -954,8 +954,11 @@
 	<script>
 		$('#add-course-tab').steps({
 		  onFinish: function () {
-		   $("#shide").hide();
-		   $("#sshow").show();
+		   // $("#shide").hide();
+		   // $("#sshow").show();
+
+
+		    $("#sshow").trigger('click');
 		  }
 		});
 
