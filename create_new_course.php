@@ -785,7 +785,7 @@
 											<div class="title-icon">
 												<h3 class="title"><i class="uil uil-file-copy-alt"></i>Extra Information</h3>
 											</div>
-										   <!-- <div class="course__form">
+										   <div class="course__form">
 												<div class="row">
 													<div class="col-lg-12">		
 														<div class="extra_info">		
@@ -877,14 +877,14 @@
 														</div>
 													</div>
 												</div>
-											</div> -->
+											</div>
 										 </div>
 									</div>
 								   
 								</div>
 								<div class="step-footer step-tab-pager">
 									<button data-direction="prev" class="btn btn-default steps_btn">PREVIOUS</button>
-									<button data-direction="next" class="btn btn-default steps_btn">Next</button>
+									<button data-direction="next" class="btn btn-default steps_btn" id="next">Next</button>
 									<button data-direction="finish" name="submit_btn" class="btn btn-default steps_btn" type="submit" id="shide">Submit</button>
 									<input type="submit" value="Submit" style="display: none;" id="sshow">
 								</div>
@@ -958,6 +958,11 @@
 		   $("#sshow").show();
 		  }
 		});
+
+		// $("#next").click(function(){
+  // 				alert("The paragraph was clicked.");
+  				
+		// });
 
 		$(document).ready(function (e) {
 	$("#newCourseForm").on('submit',(function(e) {
