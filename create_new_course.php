@@ -1,5 +1,22 @@
-﻿<!DOCTYPE html>
-<?php include 'dbconfig.php'; ?>
+<!DOCTYPE html>
+
+<?php 
+
+session_start();
+
+include 'dbconfig.php'; 
+
+
+
+$sql="DELETE FROM temp_lecture_title WHERE cc_id IN(SELECT id FROM temp_course_content WHERE
+			 t_id=".$_SESSION['id'].")";
+$sql2="DELETE FROM temp_course_content WHERE t_id=".$_SESSION['id'];
+mysqli_query($con, $sql);
+mysqli_query($con, $sql2);
+
+
+?>
+
 <html lang="en">
 <head>
 		<meta charset="utf-8">
@@ -9,10 +26,10 @@
 		<meta name="author" content="Gambolthemes">		
 		<title>Cursus - Create New Course</title>
 		
-		<!-- Favicon Icon -->
+		
 		<link rel="icon" type="image/png" href="images/fav.png">
 		
-		<!-- Stylesheets -->
+		
 		<link href='../../../fonts.googleapis.com/cssccc8.css?family=Roboto:400,700,500' rel='stylesheet'>
 		<link href='vendor/unicons-2.0.1/css/unicons.css' rel='stylesheet'>
 		<link href="css/vertical-responsive-menu1.min.css" rel="stylesheet">
@@ -21,16 +38,20 @@
 		<link href="css/night-mode.css" rel="stylesheet">
 		<link href="css/jquery-steps.css" rel="stylesheet">
 		
-		<!-- Vendor Stylesheets -->
+		
 		<link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet">
 		<link href="vendor/OwlCarousel/assets/owl.carousel.css" rel="stylesheet">
 		<link href="vendor/OwlCarousel/assets/owl.theme.default.min.css" rel="stylesheet">
 		<link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 		<link rel="stylesheet" type="text/css" href="vendor/semantic/semantic.min.css">		
+		<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
 
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 		<script>
+
 		$(document).ready(function(){
+
+
 		  $("#category").change(function(){
 		    $.ajax({
 		    	url:'ajax/courses.php?',
@@ -57,6 +78,19 @@
 		    	}
 		    });
 		  });
+
+
+		  if(main_title1.length==0 || sub_title.length==0 ||sub_title.isEmpty()|| description.length==0)
+		  {
+		  	 $("#next").prop('disabled', true); 
+		  	 return false;
+
+		  }
+		  else
+		  {
+		  	 $("#next").prop('disabled', false); 
+		  	 return true;
+		  }
 		});
 		function readURL(input) {
         if (input.files && input.files[0]) {
@@ -326,7 +360,7 @@
 	<div class="wrapper">
 		<div class="sa4d25">
 			<div class="container">
-				<form id="newCourseForm" action="ajax/createNewCouerse.php" method="POST">
+				<form id="newCourseForm" action="ajax/createNewCouerse.php" method="POST" role="msform"autocomplete="off">
 				<div class="row">
 					<div class="col-lg-12">	
 						<h2 class="st_title"><i class="uil uil-analysis"></i> Create New Course</h2>
@@ -375,11 +409,13 @@
 															<div class="ui search focus mt-30 lbel25">
 																<label>Course Title*</label>
 																<div class="ui left icon input swdh19">
-																	<input class="prompt srch_explore" type="text" placeholder="Insert your course title." name="main_title" data-purpose="edit-course-title" maxlength="60" id="main_title" value="" required>															
+																	<input class="prompt srch_explore" type="text" placeholder="Insert your course title." name="main_title" data-purpose="edit-course-title" maxlength="60" id=main_title value="" required>															
 																	<div class="badge_num">60</div>
 																</div>
+																<div id=main_error_title style="color:red; margin-left: 50px;"></div>
 															</div>									
 														</div>
+														
 														<div class="col-lg-6 col-md-6">															
 															<div class="ui search focus mt-30 lbel25">
 																<label>Course Subtitle*</label>
@@ -387,6 +423,7 @@
 																	<input class="prompt srch_explore" type="text" placeholder="Insert your course Subtitle." name="sub_title" data-purpose="edit-course-title" maxlength="60" id="sub_title" value="" required>															
 																	<div class="badge_num2">120</div>
 																</div>
+																<div id=sub_error_title style="color:red; margin-left: 50px;"></div>
 															</div>									
 														</div>
 														<div class="col-lg-12 col-md-12">
@@ -409,9 +446,12 @@
 																			<div class="field">
 																				<textarea rows="5" name="description" id="description" placeholder="Insert your course description" required></textarea>
 																			</div>
-																		</div>										
+																		</div>						
+
 																	</div>
+
 																</div>
+																	<div id="description_error" style="color:red; margin-left: 10px;" 	></div>
 															</div>
 														</div>
 														<div class="col-lg-4 col-md-12">
@@ -436,6 +476,7 @@
 																<option value="14">मराठी</option>
 																<option value="15">ਪੰਜਾਬੀ</option>
 															</select>
+															<div id="language_error" style="color:red; margin-left: 10px;"></div>
 														</div>
 														<div class="col-lg-4 col-md-6">
 															<div class="mt-30 lbel25">
@@ -611,11 +652,13 @@
 																	<div class="ui search focus mt-30 lbel25">
 																		<label>Course Content Title*</label>
 																		<div class="ui left icon input swdh19">
-																			<input class="prompt srch_explore" type="text" placeholder="Insert your course content title." name="cctitle" data-purpose="edit-course-title" maxlength="60" id="Content[title]" value="">															
+
+																			<input class="prompt srch_explore" type="text" placeholder="Insert your course content title." name="cctitle" data-purpose="edit-course-title" maxlength="60" id="cctitle">															
 																		</div>
+																		<div id="CTITLE" style="color:red; margin-left: 5px;"></div>
 																	</div>									
 																</div>
-																<div class="col-lg-12 col-md-12">	
+															<!-- 	<div class="col-lg-12 col-md-12">	
 																	<div class="lecture_title">
 																		<h4>Add Lecture</h4>
 																	</div>
@@ -628,7 +671,7 @@
 																		</div>
 																	</div>									
 																</div>
-																<!-- <div class="col-lg-4 col-md-6">
+															 -->	<!-- <div class="col-lg-4 col-md-6">
 																	<div class="part_input mt-30 lbel25">
 																		<label>File*</label>
 																		<div class="input-group">
@@ -647,7 +690,7 @@
 																		</div>
 																	</div>										
 																</div> -->
-																<div class="col-lg-12 col-md-12">	
+														<!--		<div class="col-lg-12 col-md-12">	
 																	<div class="course_des_textarea mt-30 lbel25">
 																		<label>Description*</label>
 																		<div class="course_des_bg">
@@ -690,57 +733,63 @@
 																		</div>
 																	</div>									
 																</div> -->
-																<!-- <div class="col-lg-2 col-md-12">
-																	<button class="part_btn_save prt-sv" type="submit">Save Lecture</button>
-																</div> -->
-																<!-- <div class="col-lg-12 col-md-12">
-																	<div class="table-responsive mt-50 mb-0">
-																		<table class="table ucp-table">
+																 <div class="col-lg-2 col-md-12">
+																	<button class="part_btn_save prt-sv" type="submit" id="save_btn">Save </button>
+																</div> 
+
+																
+
+
+																 <div class="col-lg-12 col-md-12" id="course_content_table" style="display: none;">
+																	<div class="table-responsive mt-50 mb-0" id="CCData">
+																		<table class="table ucp-table " style="overflow: scroll;">
 																			<thead class="thead-s">
 																				<tr>
-																					<th class="text-center" scope="col">Lecture</th>
-																					<th class="cell-ta">Title</th>
-																					<th class="text-center" scope="col">Volume</th>
+																					<th class="text-center" scope="col">Sl.no</th>
+																					<th class="cell-ta">Course Cotent Title</th>
+																				<!--	<th class="text-center" scope="col">Volume</th>
 																					<th class="text-center" scope="col">Duration</th>
 																					<th class="text-center" scope="col">Page</th>
-																					<th class="text-center" scope="col">File</th>
-																					<th class="text-center" scope="col">Controls</th>
+																					<th class="text-center" scope="col">File</th> -->
+																					<th class="text-center" scope="col">Action</th>
 																				</tr>
 																			</thead>
 																			<tbody>
-																				<tr>
+																	<!--			<tr>
 																					<td class="text-center">1</td>
 																					<td class="cell-ta">Lecture Content Title</td>
-																					<td class="text-center">25</td>
-																					<td class="text-center">6</td>
+																					<!-- <td class="text-center">25</td>
+																				<<td class="text-center">6</td>
 																					<td class="text-center">0</td>
-																					<td class="text-center"><a href="#">Video</a></td>
+																					<td class="text-center"><a href="#">Video</a></td> 	
 																					<td class="text-center">
-																						<a href="#" title="Edit" class="gray-s"><i class="uil uil-edit-alt"></i></a>
+																						<a href="#" title="Edit"
+																					class="gray-s"><i class="uil uil-edit-alt"></i></a>
 																						<a href="#" title="Delete" class="gray-s"><i class="uil uil-trash-alt"></i></a>
 																					</td>
 																				</tr>
-																				<tr>
+																			<!--	<tr>
 																					<td class="text-center">2</td>
 																					<td class="cell-ta">Lecture Content Title</td>
 																					<td class="text-center">25</td>
 																					<td class="text-center">0</td>
-																					<td class="text-center">3</td>
-																					<td class="text-center"><a href="#">File</a></td>
+																					<td class="text-center">3</td>		
+																					<td class="text-center"><a href="#">File</a></td> 
 																					<td class="text-center">
 																						<a href="#" title="Edit" class="gray-s"><i class="uil uil-edit-alt"></i></a>
 																						<a href="#" title="Delete" class="gray-s"><i class="uil uil-trash-alt"></i></a>
-																					</td>
+																					</td>-->
 																				</tr>
 																			</tbody>
 																		</table>
 																	</div>
-																</div> -->
-																<!-- <div class="col-lg-12 col-md-12">
+																</div> 
+																 <div class="col-lg-12 col-md-12">
 																	<div class="save_content">
 																		<button class="save_content_btn" type="Submit">Save Course Content</button>
+
 																	</div>
-																</div> -->
+																</div> 
 															</div>
 														</div>
 													</div>
@@ -884,7 +933,7 @@
 								</div>
 								<div class="step-footer step-tab-pager">
 									<button data-direction="prev" class="btn btn-default steps_btn">PREVIOUS</button>
-									<button data-direction="next" class="btn btn-default steps_btn">Next</button>
+									<button data-direction="next" id="next" class="btn btn-default steps_btn">Next</button>
 									<button data-direction="finish" name="submit_btn" class="btn btn-default steps_btn" type="submit" id="shide">Submit</button>
 									<input type="submit" value="Submit" style="display: none;" id="sshow">
 								</div>
@@ -945,6 +994,7 @@
 
 	<script src="js/vertical-responsive-menu.min.js"></script>
 	<script src="js/jquery-3.3.1.min.js"></script>
+
 	<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 	<script src="vendor/OwlCarousel/owl.carousel.js"></script>
 	<script src="vendor/semantic/semantic.min.js"></script>
@@ -965,6 +1015,8 @@
 		$(document).ready(function (e) {
 	$("#newCourseForm").on('submit',(function(e) {
 		e.preventDefault();
+
+	
 		     $.ajax({
 		        	url: 'ajax/createNewCourse.php',
 					type: "POST",
@@ -981,6 +1033,42 @@
 		   			});
 	}));
 });
+
+ $("#save_btn").click(function() {
+               var ctitle= $("#cctitle").val();
+             // alert(ctitle);
+             if(ctitle.isEmpty||ctitle.length==0||ctitle==null)
+             {
+             	$("#CTITLE").html("please enter course content");
+				return false;
+             }
+             else
+             {
+                $.ajax({
+                    type: "POST",
+                    url: "ajax/add_course_content_lecture_content.php?",
+
+                    data: "ctitle=" + ctitle+"&type=course",
+                    success: function(data) {
+                      $("#CCData").html(data);
+                      $("#course_content_table").show();
+                    },
+                    error:function(data){
+                    	alert(data+"fail");
+                    }
+
+                });
+            }
+              
+
+
+            });
+
+
+function addLectureTitle(id)
+{
+alert(id);
+}
 
 	</script>
 </body>
