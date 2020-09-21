@@ -47,6 +47,10 @@ mysqli_query($con, $sql2);
 		<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
 
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 		<script>
 
 		$(document).ready(function(){
@@ -689,8 +693,8 @@ mysqli_query($con, $sql2);
 																			<input class="prompt srch_explore" type="number" name="sort" min="0" max="100" placeholder="0">															
 																		</div>
 																	</div>										
-																</div> -->
-														<!--		<div class="col-lg-12 col-md-12">	
+																</div> 
+																<div class="col-lg-12 col-md-12">	
 																	<div class="course_des_textarea mt-30 lbel25">
 																		<label>Description*</label>
 																		<div class="course_des_bg">
@@ -715,7 +719,7 @@ mysqli_query($con, $sql2);
 																		</div>
 																	</div>
 																</div>
-																<!-- <div class="col-lg-5 col-md-6">															
+																 <div class="col-lg-5 col-md-6">															
 																	<div class="ui search focus mt-30 lbel25">
 																		<label>Volume*</label>
 																		<div class="ui left icon input swdh19 swdh95">
@@ -733,15 +737,15 @@ mysqli_query($con, $sql2);
 																		</div>
 																	</div>									
 																</div> -->
-																 <div class="col-lg-2 col-md-12">
-																	<button class="part_btn_save prt-sv" type="submit" id="save_btn">Save </button>
+																 <div class="col-lg-12 col-md-12">
+																	<button class="part_btn_save prt-sv" type="submit" id="save_btn">Save Course Content</button>
 																</div> 
 
 																
 
 
-																 <div class="col-lg-12 col-md-12" id="course_content_table" style="display: none;">
-																	<div class="table-responsive mt-50 mb-0" id="CCData">
+																 <div class="col-lg-12 col-md-12" id="course_content_table">
+																	<div class="table-responsive mt-50 mb-0" id="CCData" style="display: none;">
 																		<table class="table ucp-table " style="overflow: scroll;">
 																			<thead class="thead-s">
 																				<tr>
@@ -758,7 +762,7 @@ mysqli_query($con, $sql2);
 																	<!--			<tr>
 																					<td class="text-center">1</td>
 																					<td class="cell-ta">Lecture Content Title</td>
-																					<!-- <td class="text-center">25</td>
+																					<td class="text-center">25</td>
 																				<<td class="text-center">6</td>
 																					<td class="text-center">0</td>
 																					<td class="text-center"><a href="#">Video</a></td> 	
@@ -768,7 +772,7 @@ mysqli_query($con, $sql2);
 																						<a href="#" title="Delete" class="gray-s"><i class="uil uil-trash-alt"></i></a>
 																					</td>
 																				</tr>
-																			<!--	<tr>
+																				<tr>
 																					<td class="text-center">2</td>
 																					<td class="cell-ta">Lecture Content Title</td>
 																					<td class="text-center">25</td>
@@ -784,12 +788,12 @@ mysqli_query($con, $sql2);
 																		</table>
 																	</div>
 																</div> 
-																 <div class="col-lg-12 col-md-12">
+																 <!-- <div class="col-lg-12 col-md-12">
 																	<div class="save_content">
 																		<button class="save_content_btn" type="Submit">Save Course Content</button>
 
 																	</div>
-																</div> 
+																</div>  -->
 															</div>
 														</div>
 													</div>
@@ -933,11 +937,7 @@ mysqli_query($con, $sql2);
 								</div>
 								<div class="step-footer step-tab-pager">
 									<button data-direction="prev" class="btn btn-default steps_btn">PREVIOUS</button>
-<<<<<<< HEAD
-									<button data-direction="next" id="next" class="btn btn-default steps_btn">Next</button>
-=======
 									<button data-direction="next" class="btn btn-default steps_btn" id="next">Next</button>
->>>>>>> 13b96e187a55363cb5c5c8bf0065095847891759
 									<button data-direction="finish" name="submit_btn" class="btn btn-default steps_btn" type="submit" id="shide">Submit</button>
 									<input type="submit" value="Submit" style="display: none;" id="sshow">
 								</div>
@@ -946,6 +946,7 @@ mysqli_query($con, $sql2);
                     </div>
 				</div>
 				<input type="submit" value="Submit" style="display: none;" id="sshow">
+				<div id="lecture_popup"></div>
 			</form>
 			</div>
 		</div>
@@ -993,6 +994,7 @@ mysqli_query($con, $sql2);
 				</div>
 			</div>
 		</footer>
+  
 	</div>
 	<!-- Body End -->
 
@@ -1006,79 +1008,68 @@ mysqli_query($con, $sql2);
 	<script src="js/night-mode.js"></script>
 	<script src="js/jquery-steps.min.js"></script>
 	<script>
-		$('#add-course-tab').steps({
-		  onFinish: function () {
-		   // $("#shide").hide();
-		   // $("#sshow").show();
-
-
-		    $("#sshow").trigger('click');
-		  }
+	$('#add-course-tab').steps({
+	onFinish: function () {
+		$("#sshow").trigger('click');
+	}
+	});
+	$(document).ready(function (e) {
+		$("#newCourseForm").on('submit',(function(e) {
+			e.preventDefault();	
+		    $.ajax({
+		        url: 'ajax/createNewCourse.php',
+				type: "POST",
+				data:  new FormData(this),
+				contentType: false,
+	    	    cache: false,
+				processData:false,
+				success: function(data){
+					alert("success "+data);
+				},
+				error: function(data){
+			    	alert("error "+data);
+			    } 	        
+		   	});
+		}));
+	});
+	$("#save_btn").click(function() {
+	    var ctitle= $("#cctitle").val();
+	    if(ctitle.isEmpty||ctitle.length==0||ctitle==null)
+	    {
+	       	$("#CTITLE").html("Please Enter Course Content");
+			return false;
+	    }
+	    else
+		{
+		    $.ajax({
+		        type: "POST",
+		        url: "ajax/add_course_content_lecture_content.php?",
+		        data: "ctitle=" + ctitle+"&type=course",
+		        success: function(data) {
+		          $("#CCData").html(data);
+		          $("#CCData").show();
+		        },
+		        error:function(data){
+		        	alert(data+"fail");
+		        }
+		    });
+		}
+	});
+	function addLectureTitle(id)
+	{
+		$.ajax({
+			url:'ajax/lecture_popup.php',
+			type:'POST',
+			data:'id='+id,
+			success:function(data){
+				$("#lecture_popup").html(data);
+				$.noConflict();
+				$('#myModal'+id).modal('show');
+			},
+			error:function(){
+			}
 		});
-
-		// $("#next").click(function(){
-  // 				alert("The paragraph was clicked.");
-  				
-		// });
-
-		$(document).ready(function (e) {
-	$("#newCourseForm").on('submit',(function(e) {
-		e.preventDefault();
-
-	
-		     $.ajax({
-		        	url: 'ajax/createNewCourse.php',
-					type: "POST",
-					data:  new FormData(this),
-					contentType: false,
-		    	    cache: false,
-					processData:false,
-					success: function(data){
-						alert("success "+data);
-				    },
-				  	error: function(data){
-			    		alert("error "+data);
-			    	} 	        
-		   			});
-	}));
-});
-
- $("#save_btn").click(function() {
-               var ctitle= $("#cctitle").val();
-             // alert(ctitle);
-             if(ctitle.isEmpty||ctitle.length==0||ctitle==null)
-             {
-             	$("#CTITLE").html("please enter course content");
-				return false;
-             }
-             else
-             {
-                $.ajax({
-                    type: "POST",
-                    url: "ajax/add_course_content_lecture_content.php?",
-
-                    data: "ctitle=" + ctitle+"&type=course",
-                    success: function(data) {
-                      $("#CCData").html(data);
-                      $("#course_content_table").show();
-                    },
-                    error:function(data){
-                    	alert(data+"fail");
-                    }
-
-                });
-            }
-              
-
-
-            });
-
-
-function addLectureTitle(id)
-{
-alert(id);
-}
-
-	</script>
+	}
+</script>
 </body>
 </html>
