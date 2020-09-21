@@ -1,5 +1,5 @@
 <?php include '../dbconfig.php'; ?>
-<div class="modal fade" id="myModal<?= $_POST['id']?>">
+<div class="modal fade" id="myModal">
     <div class="modal-dialog">
       <div class="modal-content">
       
@@ -49,7 +49,7 @@
                           $table.="<td class='text-center'>".++$i."</td>";
                           $table.="<td class='cell-ta'>".$row['des']."</td>";
                           $table.="<td class='text-center'><a href='#' onClick='editLectureTitle(".$row['id'].");' title='Edit'class='gray-s' id='addLectureTitle'><i class='uil uil-edit-alt'></i></a>";
-                          $table.="<a href='#' onClick='delteLectureContent(".$row['id'].");'  title='Delete' class='gray-s'><i class='uil uil-trash-alt'></i></a></td></tr>";
+                          $table.="<a href='#' onClick='deleteLectureContent(".$row['id'].");'  title='Delete' class='gray-s'><i class='uil uil-trash-alt'></i></a></td></tr>";
                         }
                         $table.="</tbody></table>";
                         echo $table;
@@ -92,4 +92,20 @@
         });
     }
   });
+    function deleteLectureContent(id){
+      if (confirm('Are you sure ?')) {
+        var cc_id=$("#cc_id").val();
+        $.ajax({
+          url:"ajax/deleteRows.php",
+          type:"POST",
+          data:"id="+id+"&wdel=lecture_content"+"&cc_id="+cc_id,
+          success:function(data){
+            $("#lcdata").html(data);
+          },
+          error:function(data){
+
+          }
+        });
+        }
+    }
   </script>

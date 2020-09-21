@@ -1,15 +1,15 @@
 <?php 
 include '../dbconfig.php';
 session_start();
+$t_id=$_SESSION['id']; 
 
- $t_id=$_SESSION['id'];
- $type=$_POST['type'];
-if($type=="course"){
-$cTitile=$_POST['ctitle'];
-$sql = "INSERT INTO temp_course_content (t_id,des) VALUES (".$t_id.", '".$cTitile."')";
-$result=mysqli_query($con, $sql);
-		if ($result) {
-		  $table="";
+if (isset($_POST['wdel']) && $_POST['wdel']=="c_l") {
+	$sql="DELETE FROM temp_lecture_title WHERE cc_id =".$_POST['id'];
+	$sql2="DELETE FROM temp_course_content WHERE id=".$_POST['id'];
+	$result=mysqli_query($con, $sql);
+	$result2=mysqli_query($con, $sql2);
+	if ($result2) {
+		$table="";
 		 $table=" <table class='table ucp-table '>
 					<thead class='thead-s'>
 						<tr>
@@ -36,18 +36,13 @@ $result=mysqli_query($con, $sql);
 				}
 				$table.="</tbody></table>";
 				echo $table;
-
-		} 
-		else {
-		  echo 'fail...!!';
-		}
 	}
-
-	if($type=="lecture"){
-		$sql = "INSERT INTO temp_lecture_title (cc_id,des) VALUES (".$_POST['cc_id'].", '".$_POST['ltitle']."')";
-		$result=mysqli_query($con, $sql);
-		if ($result) {
-		  $table="";
+}
+elseif (isset($_POST['wdel']) && $_POST['wdel']=="lecture_content") {
+	$sql="DELETE FROM temp_lecture_title WHERE id =".$_POST['id'];
+	$result=mysqli_query($con, $sql);
+	if ($result) {
+		$table="";
 		 $table=" <table class='table ucp-table '>
 					<thead class='thead-s'>
 						<tr>
@@ -74,19 +69,6 @@ $result=mysqli_query($con, $sql);
 				}
 				$table.="</tbody></table>";
 				echo $table;
-
-		} 
-		else {
-		  echo 'fail...!!';
-		}
 	}
- ?>
-
- <script>
-$(document).ready(function(){
-  $("#addLectureTitle").click(function(){
-    $("#myModal").modal();
-  });
-});
-</script>
-
+}
+?>

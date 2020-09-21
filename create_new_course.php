@@ -1064,11 +1064,28 @@ mysqli_query($con, $sql2);
 			success:function(data){
 				$("#lecture_popup").html(data);
 				$.noConflict();
-				$('#myModal'+id).modal('show');
+				$('#myModal').modal('show');
 			},
 			error:function(){
 			}
 		});
+	}
+	function delteCourseContent(id)
+	{
+		if (confirm('Are you sure ?')) {
+			$.ajax({
+			url:'ajax/deleteRows.php',
+			type:'POST',
+			data:'id='+id+"&wdel=c_l",
+			success: function(data) {
+		          $("#CCData").html(data);
+		          $("#CCData").show();
+		        },
+		    error:function(data){
+		        	alert(data+"fail");
+		    }
+			});
+    	}
 	}
 </script>
 </body>
